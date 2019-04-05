@@ -1,0 +1,46 @@
+
+<% if action == :new %>
+    <% action_url = tracks_url %>
+<% else %>
+    <% action_url = track_url(track) %>
+<% end %>
+
+<form action="<%=action_url%>" method="POST">
+    <%=auth_token%>
+    <%if action == :edit%>
+    <input type="hidden" name="_method" value='PATCH'>
+    <%end%>
+    <label for="title">Artist: </label>
+    <select name="track[album]">
+        <option value="default" disabled>Choose an artist</option>
+        
+        <% albums.each do |album| %>
+            <% selected = current_album.title == album.title ? "selected" : ""%>
+            <option value="<%= album.title %>" <%=selected%>  ><%= album.title %></option>
+        <% end %>
+    </select>
+    <br><br>
+    <label for="title">Title: </label>
+    <input type="text" name="track[title]" value="<%=@track.title%>">
+    <br><br>
+    <label for="year">Order: </label>
+    <input type="text" name="track[ord]" value="<%=@track.ord%>">
+    <br><br>
+    <label>Bonus: </label>
+    <input type="radio" name="track[bonus]" value="false" <%=track.bonus ? "" : "checked"%> >
+    <label>No</label>
+    <input type="radio" name="track[bonus]" value="true" <%=track.bonus ? "checked" : ""%> >
+    <label>Yes</label>
+    
+    <textarea name="track[lyrics]"><%=track.lyrics%></textarea>
+
+    <br><br>
+    <%if action == :new%>
+        <input type="submit" value="Add Album!"> 
+    <%else%>
+        <input type="submit" value="Edit Album!"> 
+    <%end%>
+    <div class="link-buttons">
+        <a href="<%=band_url(current_band)%>">Cancel</a>
+    </div>
+</form>
